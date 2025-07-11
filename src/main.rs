@@ -18,8 +18,8 @@ fn main() {
 
         let rb_r_glyphid = rb_output.glyph_infos()[0].glyph_id; // should be for R
 
-        let ab_glyph_id = ab_glyph::GlyphId(rb_r_glyphid as u16).with_scale(1.0);
-        eprintln!("{:?}", ab_font.outline_glyph(ab_glyph_id));
+        let ab_glyph_id = ab_glyph::GlyphId(rb_r_glyphid as u16);
+        eprintln!("{}: {:?}", rb_r_glyphid, ab_font.outline(ab_glyph_id));
     }
 
     {
@@ -32,8 +32,8 @@ fn main() {
 
         let hb_r_glyphid = hb_output.get_glyph_infos()[0].codepoint; // should be for R
 
-        let ab_glyph_id = ab_glyph::GlyphId(hb_r_glyphid as u16).with_scale(1.0);
-        eprintln!("{:?}",ab_font.outline_glyph(ab_glyph_id));
+        let ab_glyph_id = ab_glyph::GlyphId(hb_r_glyphid as u16);
+        eprintln!("{}: {:?}", hb_r_glyphid, ab_font.outline(ab_glyph_id));
     };
 
     // println!("Hello, world!");
