@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 rustybuzz = "0.20.1"
+skrifa = "0.32.0"
