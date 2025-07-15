@@ -1,37 +1,28 @@
-use rustybuzz::ttf_parser::{self, GlyphId, OutlineBuilder};
 use skrifa::{MetadataProvider, outline::OutlinePen, prelude::Size};
+use ttf_parser::{self, GlyphId, OutlineBuilder};
 
 fn main() {
-    let text = "Roboto";
-
     let font = include_bytes!("../RobotoSerif[grad,opsz,wdth,wgth].ttf");
-    // let font = include_bytes!("../NotoArabic.ttf"); // works !
+
+    let rb_r_glyphid = 130; // R in Roboto font.
+    let mut mock = OutlineMocker;
 
     {
-        let rb_font = rustybuzz::Face::from_slice(font, 0).unwrap();
-        let mut buf = rustybuzz::UnicodeBuffer::new();
-        buf.push_str(text);
-        let rb_output = rustybuzz::shape(&rb_font, &[], buf);
-
-        let rb_r_glyphid = rb_output.glyph_infos()[0].glyph_id; // should be for R
-        let mut mock = OutlineMocker;
-
-        {
-            eprintln!("ttf_parser");
-            let ttf_font = ttf_parser::Face::parse(font, 0).unwrap();
-            let res = ttf_font.outline_glyph(GlyphId(rb_r_glyphid as u16), &mut mock);
-            dbg!(res.is_some());
-        }
-        {
-            eprintln!("skrifa"); // works
-            let sk_font = skrifa::FontRef::new(font).unwrap();
-            let sk_outlines = sk_font
-                .outline_glyphs()
-                .get(skrifa::GlyphId::new(rb_r_glyphid))
-                .unwrap();
-            let res = sk_outlines.draw(Size::unscaled(), &mut mock);
-            dbg!(res.is_ok());
-        }
+        eprintln!("ttf_parser");
+        // only succeeds if `gvar-alloc` feature is turned on.
+        let ttf_font = ttf_parser::Face::parse(font, 0).unwrap();
+        let res = ttf_font.outline_glyph(GlyphId(rb_r_glyphid as u16), &mut mock);
+        dbg!(res.is_some());
+    }
+    {
+        eprintln!("skrifa");
+        let sk_font = skrifa::FontRef::new(font).unwrap();
+        let sk_outlines = sk_font
+            .outline_glyphs()
+            .get(skrifa::GlyphId::new(rb_r_glyphid))
+            .unwrap();
+        let res = sk_outlines.draw(Size::unscaled(), &mut mock);
+        dbg!(res.is_ok());
     }
 }
 

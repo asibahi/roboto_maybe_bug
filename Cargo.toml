@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-rustybuzz = "0.20.1"
+# rustybuzz = "0.20.1"
+ttf-parser = {version = "*", features = ["gvar-alloc"]}
 skrifa = "0.32.0"
